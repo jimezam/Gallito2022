@@ -6,6 +6,9 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\PostCreateRequest;
+
 class PostController extends Controller
 {
     /**
@@ -33,7 +36,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -42,9 +45,14 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostCreateRequest $request)
     {
-        //
+        $post = new Post();
+        $post->fill($request->input());
+        $post->user_id = Auth::id();
+        $post->save();
+
+        return redirect(route('home'));
     }
 
     /**
